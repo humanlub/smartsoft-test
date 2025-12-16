@@ -1,47 +1,66 @@
-$('#contactForm').submit(function(e){
-    e.preventDefault();
+// Первая форма
+$('#contactForm').on('submit', function (e) {
+e.preventDefault();
 
-    let name = $('#name').val();
-    let email = $('#email').val();
-    let message = $('#message').val();
 
-    if (name.length < 3) {
-        alert('Имя минимум 3 символа');
-        return;
-    }
+const name = $('#name').val().trim();
+const email = $('#email').val().trim();
+const message = $('#message').val().trim();
 
-    $.ajax({
-        url: 'http://127.0.0.1',
-        method: 'POST',
-        data: { name, email, message },
-        error: function () {
-            alert('AJAX запрос отправлен');
-        }
-    });
+
+if (name.length < 3) {
+alert('Имя должно быть минимум 3 символа');
+return;
+}
+
+
+$.ajax({
+url: 'http://127.0.0.1',
+method: 'POST',
+data: { name, email, message },
+success: function () {
+alert('Форма отправлена');
+},
+error: function () {
+alert('AJAX запрос отправлен (сервер не обязателен)');
+}
+});
 });
 
-$('#orderForm').submit(function(e){
-    e.preventDefault();
 
-    Swal.fire({
-        title: 'Заказ создан',
-        text: 'Имя: ' + $('#orderName').val()
-    });
+// Вторая форма
+$('#orderForm').on('submit', function (e) {
+e.preventDefault();
+
+
+const name = $('#orderName').val();
+const comment = $('#orderComment').val();
+
+
+Swal.fire({
+title: 'Заказ создан',
+html: `<b>Имя:</b> ${name}<br><b>Комментарий:</b> ${comment}`,
+icon: 'success'
+});
 });
 
-const reviews = [
-    { name: 'Николай', text: 'Отлично' },
-    { name: 'Сергей', text: 'Хорошо' },
-    { name: 'Антон', text: 'Норм' }
+
+// Отзывы (JSON)
+const reviewsData = [
+{ name: 'Иван', text: 'Отличный сервис!' },
+{ name: 'Анна', text: 'Быстро и удобно.' },
+{ name: 'Петр', text: 'Все понравилось.' },
+{ name: 'Мария', text: 'Рекомендую!' }
 ];
 
-reviews.forEach(r => {
-    $('#reviews').append(`
-        <div class="col-md-4 mb-3">
-            <div class="card p-3">
-                <b>${r.name}</b>
-                <p>${r.text}</p>
-            </div>
-        </div>
-    `);
+
+reviewsData.forEach(review => {
+$('#reviews').append(`
+<div class="col-md-4 mb-3">
+<div class="card p-3 h-100">
+<h6>${review.name}</h6>
+<p class="mb-0">${review.text}</p>
+</div>
+</div>
+`);
 });
